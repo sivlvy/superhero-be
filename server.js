@@ -6,10 +6,6 @@ const superHeroesRoutes = require("./routes/superheroes.routes");
 
 const PORT = 3000;
 
-app.use(express.json());
-
-app.use("/api", superHeroesRoutes);
-
 app.use(
   cors({
     origin: "*",
@@ -17,6 +13,9 @@ app.use(
     allowedHeaders: ["Content-Type", "Authorization"],
   }),
 );
+app.use(express.json());
+
+app.use("/api", superHeroesRoutes);
 
 sequelize
   .sync()

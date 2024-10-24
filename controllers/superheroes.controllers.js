@@ -1,5 +1,15 @@
 const ctrlWrapper = require("../helpers/ctrlWrapper");
 const Superhero = require("../models/superheroes.models");
+const cloudinary = require("../configs/cloudinary.config");
+
+const uploadImagesToCloudinary = async (files) => {
+  const uploads = files.map((file) => {
+    return cloudinary.uploader.upload(file.path, { folder: "heroes" });
+  });
+
+  const results = await Promise.all(uploads);
+  return results.map((result) => result.secure_url);
+};
 
 const getAllHeroes = async (req, res) => {
   const result = await Superhero.findAll();
@@ -12,14 +22,14 @@ const getAllHeroes = async (req, res) => {
 };
 
 const createHero = async (req, res) => {
-  const {
-    nickname,
-    real_name,
-    origin_description,
-    superpowers,
-    catch_phrase,
-    images,
-  } = req.body;
+  const { nickname, real_name, origin_description, superpowers, catch_phrase } =
+    req.body;
+
+  let images = [];
+
+  if (req.files && req.files.length > 0) {
+    images = await uploadImagesToCloudinary(req.files);
+  }
 
   const newHero = await Superhero.create({
     nickname,
@@ -29,12 +39,18 @@ const createHero = async (req, res) => {
     catch_phrase,
     images,
   });
+
   res.status(201).json(newHero);
 };
 
 const updateHero = async (req, res) => {
   const { id } = req.params;
   const updateData = req.body;
+
+  if (req.files && req.files.length > 0) {
+    const images = await uploadImagesToCloudinary(req.files);
+    updateData.images = images;
+  }
 
   const [updated] = await Superhero.update(updateData, { where: { id } });
 
@@ -47,6 +63,14 @@ const updateHero = async (req, res) => {
 
 const deleteHero = async (req, res) => {
   const { id } = req.params;
+
+  const deletedHero = await Superhero.findByPk(id);
+  if (deletedHero) {
+    deletedHero.images.forEach((image) => {
+      const publicId = image.split("/").pop().split(".")[0];
+      cloudinary.uploader.destroy(publicId);
+    });
+  }
 
   const deleted = await Superhero.destroy({ where: { id } });
 

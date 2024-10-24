@@ -1,5 +1,5 @@
 const { Model, DataTypes } = require("sequelize");
-const sequelize = require("../config/config.db");
+const sequelize = require("../configs/db.config");
 
 class Superhero extends Model {}
 

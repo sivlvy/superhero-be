@@ -5,18 +5,22 @@ const {
   createSuperheroSchema,
   updateSuperheroSchema,
 } = require("../schemes/superheroes.schemes");
+const upload = require("../configs/multer.config");
 
 router.get("/", superHeroesControllers.getAllHeroes);
 
 router.post(
   "/",
+
   validateBody(createSuperheroSchema),
+  upload.array("images", 10),
   superHeroesControllers.createHero,
 );
 
 router.put(
   "/:id",
   validateBody(updateSuperheroSchema),
+  upload.array("images", 10),
   superHeroesControllers.updateHero,
 );
 

@@ -14,10 +14,8 @@ const uploadImagesToCloudinary = async (files) => {
 const getAllHeroes = async (req, res) => {
   const result = await Superhero.findAll();
   res.status(200).json({
-    data: {
-      heroes: result,
-      totalHeroes: result.length,
-    },
+    heroes: result,
+    totalHeroes: result.length,
   });
 };
 

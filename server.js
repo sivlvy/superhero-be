@@ -9,11 +9,16 @@ const PORT = 3000;
 app.use(express.json());
 
 app.use("/api", superHeroesRoutes);
+
 app.use(
   cors({
-    origin: "*",
+    origin: "http://localhost:3000",
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+    credentials: true,
   }),
 );
+
 sequelize
   .sync()
   .then(() => console.log("All models were synchronized successfully."))

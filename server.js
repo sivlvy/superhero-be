@@ -1,6 +1,7 @@
 const express = require("express");
 const sequelize = require("./configs/db.config");
 const app = express();
+const cors = require("cors");
 const superHeroesRoutes = require("./routes/superheroes.routes");
 
 const PORT = 3000;
@@ -8,7 +9,7 @@ const PORT = 3000;
 app.use(express.json());
 
 app.use("/api", superHeroesRoutes);
-
+app.use(cors());
 sequelize
   .sync()
   .then(() => console.log("All models were synchronized successfully."))

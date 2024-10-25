@@ -74,7 +74,7 @@ const deleteHero = async (req, res) => {
 
   if (!deleted) return res.status(404).json({ message: "Superhero not found" });
 
-  res.status(204).json({ message: "Superhero deleted" });
+  res.status(200).json({ message: "Superhero deleted" });
 };
 
 module.exports = {

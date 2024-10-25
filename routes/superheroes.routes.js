@@ -11,16 +11,17 @@ router.get("/", superHeroesControllers.getAllHeroes);
 
 router.post(
   "/",
+  upload.array("images", 10),
 
   validateBody(createSuperheroSchema),
-  upload.array("images", 10),
   superHeroesControllers.createHero,
 );
 
 router.put(
   "/:id",
-  validateBody(updateSuperheroSchema),
   upload.array("images", 10),
+
+  validateBody(updateSuperheroSchema),
   superHeroesControllers.updateHero,
 );
 

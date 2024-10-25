@@ -4,7 +4,7 @@ const cloudinary = require("../configs/cloudinary.config");
 
 const uploadImagesToCloudinary = async (files) => {
   const uploads = files.map((file) => {
-    return cloudinary.uploader.upload(file.path, { folder: "heroes" });
+    return cloudinary.uploader.upload(file.path, { folder: "superheroes" });
   });
 
   const results = await Promise.all(uploads);

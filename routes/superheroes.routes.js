@@ -20,7 +20,6 @@ router.post(
 router.put(
   "/:id",
   upload.array("images", 10),
-
   validateBody(updateSuperheroSchema),
   superHeroesControllers.updateHero,
 );
